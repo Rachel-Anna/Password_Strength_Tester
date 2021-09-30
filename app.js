@@ -15,26 +15,25 @@ function updateStrengthMeter() {
     let messageElement = document.createElement("div");
     messageElement.innerText = weakness.message;
     reasonsContainer.append(messageElement);
+    strengthMeter.style.setProperty("--strength", strength);
   });
   strengthMeter.style.setProperty("--strength", strength);
 }
 
 function calculatePasswordStrength(password) {
   const weaknesses = [];
-  weaknesses.push(
-    lengthWeakness(password),
-    uppercaseWeakness(password),
-    lowercaseWeakness(password),
-    numberWeakness(password),
-    specialCharactersWeakness(password),
-    repeatCharactersWeakness(password)
-  );
+  weaknesses.push(lengthWeakness(password));
+  weaknesses.push(lowercaseWeakness(password));
+  weaknesses.push(uppercaseWeakness(password));
+  weaknesses.push(numberWeakness(password));
+  weaknesses.push(specialCharactersWeakness(password));
+  weaknesses.push(repeatCharactersWeakness(password));
   return weaknesses;
 }
 
 function lengthWeakness(password) {
   let length = password.length;
-  if (length < 5) {
+  if (length <= 5) {
     return {
       message: "Your password needs to be longer",
       deduction: 40,
