@@ -6,16 +6,16 @@ passwordInput.addEventListener("input", updateStrengthMeter);
 updateStrengthMeter();
 
 function updateStrengthMeter() {
-  let weaknesses = calculatePasswordStrength(passwordInput.value);
+  const weaknesses = calculatePasswordStrength(passwordInput.value);
+
   let strength = 100;
-  reasonsContainer.innerHTML = ""; //so the error message doesnt appear twice
-  weaknesses.map((weakness) => {
-    if (weaknesses == null) return;
+  reasonsContainer.innerHTML = "";
+  weaknesses.forEach((weakness) => {
+    if (weakness == null) return;
     strength -= weakness.deduction;
-    let messageElement = document.createElement("div");
+    const messageElement = document.createElement("div");
     messageElement.innerText = weakness.message;
-    reasonsContainer.append(messageElement);
-    strengthMeter.style.setProperty("--strength", strength);
+    reasonsContainer.appendChild(messageElement);
   });
   strengthMeter.style.setProperty("--strength", strength);
 }
@@ -32,10 +32,11 @@ function calculatePasswordStrength(password) {
 }
 
 function lengthWeakness(password) {
-  let length = password.length;
+  const length = password.length;
+
   if (length <= 5) {
     return {
-      message: "Your password needs to be longer",
+      message: "Your password is too short",
       deduction: 40,
     };
   }
@@ -48,21 +49,20 @@ function lengthWeakness(password) {
   }
 }
 
-function uppercaseWeakness(password) {
-  return characterTypeWeakness(password, /[A-Z]/g, "uppercase characters");
-}
-
 function lowercaseWeakness(password) {
   return characterTypeWeakness(password, /[a-z]/g, "lowercase characters");
 }
 
+function uppercaseWeakness(password) {
+  return characterTypeWeakness(password, /[A-Z]/g, "uppercase characters");
+}
+
 function characterTypeWeakness(password, regex, type) {
-  let matches = password.match(regex) || [];
-  console.log(matches);
+  const matches = password.match(regex) || [];
 
   if (matches.length === 0) {
     return {
-      message: `Your password has no ${type}}`,
+      message: `Your password has no ${type}`,
       deduction: 20,
     };
   }
